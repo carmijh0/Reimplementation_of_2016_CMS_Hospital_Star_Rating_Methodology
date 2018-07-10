@@ -36,7 +36,9 @@ sr_1 <- rating(fit_1$groups$summary_score, method="kmeans", iter.max = 100)
 
 write.csv(fit_1$groups$pars, file=file.path(op,"Oct2016_par_truelvm_fit_1.csv")) #the parameters
 write.csv(fit_1$groups$preds, file=file.path(op,"Oct2016_preds_truelvm_fit_1.csv")) #group scores
-write.csv(sr$summary_score, file=file.path(op,"Oct2016_sum_score_truelvm_fit_1.csv")) #the summary scores & stars
+write.csv(sr_1$summary_score, file=file.path(op,"Oct2016_sum_score_truelvm_fit_1.csv")) #the summary scores & stars
+
+table(sr_1$summary_score$star)
 
 ----------------------------------------------------------------
 
@@ -73,14 +75,29 @@ cah_1 <- inner_join(x_og, cah, by = 'PROVIDER_ID')
 
 ------------------------------------------------------------------
 
-#First attempt at applying the pipeline to the two separate inoput types
+#First attempt at applying the pipeline to the two separate input hospital types
 #Will have to remove the hospital type column for mstbl cleaning function to work
 
-x <- mstbl(ach_1)
-fit_test <- relvm(x)
-sr_test <- rating(fit_test$groups$summary_score, method="kmeans", iter.max = 100)
+copy_ach <- ach_1
+copy_ach$Hospital.Type <- NULL
 
+x <- mstbl(copy_ach)
+fit_ach <- relvm(x)
+sr_ach <- rating(fit_ach$groups$summary_score, method="kmeans", iter.max = 100)
 
+write.csv(sr_ach$summary_score, file=file.path(op,"ach_test.csv")) #ach summary scores & stars
 
+table(sr_ach$summary_score$star)
+
+copy_cah <- cah_1
+copy_cah$Hospital.Type <- NULL
+
+x <- mstbl(copy_cah)
+fit_cah <- relvm(x)
+sr_cah <- rating(fit_cah$groups$summary_score, method="kmeans", iter.max = 100)
+
+write.csv(sr_cah$summary_score, file=file.path(op,"cah_test.csv")) #cah summary scores & stars
+
+table(sr_cah$summary_score$star)
 
 
