@@ -100,4 +100,38 @@ write.csv(sr_cah$summary_score, file=file.path(op,"cah_test.csv")) #cah summary 
 
 table(sr_cah$summary_score$star)
 
+-----------------------------------------------------------------
+  
+#Combining ach and cah together to merge with the cost data
+
+combo <- rbind(sr_ach$summary_score, sr_cah$summary_score)
+
+combo$sum_score <- NULL
+combo$sum_score_win <- NULL
+combo$report_indicator <- NULL
+colnames(combo)[1] <- 'PROVIDER_ID'
+
+#Isolate original cms 2016 star ratings for comparison in PBI
+
+cms <- sr$summary_score
+
+cms$sum_score <- NULL
+cms$sum_score_win <- NULL
+cms$report_indicator <- NULL
+colnames(cms)[1] <- 'PROVIDER_ID'
+
+#Inner merge on provider_ID
+
+star_ratings <- inner_join(combo, cms, by = 'PROVIDER_ID')
+
+colnames(star_ratings)[2] <- 'Suggested_Rating'
+colnames(star_ratings)[3] <- 'CMS_Rating'
+
+write.csv(star_ratings, file=file.path(op,"star_ratings.csv")) #the summary suggested and cms scores
+
+-----------------------------------------------------------------
+
+setwd('C:/Users/Carmijh0/Desktop/Data_Science/Capstone/data/data')
+in_p_2015 <- read.csv('inpatient_2015_1.csv')
+  
 
