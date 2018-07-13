@@ -128,10 +128,3 @@ colnames(star_ratings)[2] <- 'Suggested_Rating'
 colnames(star_ratings)[3] <- 'CMS_Rating'
 
 write.csv(star_ratings, file=file.path(op,"star_ratings.csv")) #the summary suggested and cms scores
-
------------------------------------------------------------------
-
-setwd('C:/Users/Carmijh0/Desktop/Data_Science/Capstone/data/data')
-in_p_2015 <- read.csv('inpatient_2015_1.csv')
-  
-
