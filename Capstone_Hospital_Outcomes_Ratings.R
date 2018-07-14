@@ -16,7 +16,7 @@ op <- out_dir("C:/Users/Carmijh0/Desktop/Data_Science/Capstone/data/R_ratings") 
   
 x_og <- cms2016oct_input
 x <- mstbl(x_og)
-fit_original <- relvm(x) # fit the non-adaptive lvm model
+fit_original <- relvm_quad(x) # fit the non-adaptive lvm model
 sr <- rating(fit_original$groups$summary_score, iter.max = 1) 
 
 write.csv(fit_original$groups$pars, file=file.path(op,"Oct2016_par_truelvm_fit_original.csv")) #the parameters
@@ -32,9 +32,6 @@ write.csv(sr$summary_score, file=file.path(op,"Oct2016_sum_score_truelvm_fit_ori
 x_1 <- cms2016oct_input
 x <- mstbl(x_1)
 fit_1 <- relvm(x)
-sr_1 <- rating(fit_1$groups$summary_score, method="kmeans", iter.max = 100)
-
-write.csv(fit_1$groups$pars, file=file.path(op,"Oct2016_par_truelvm_fit_1.csv")) #the parameters
 write.csv(fit_1$groups$preds, file=file.path(op,"Oct2016_preds_truelvm_fit_1.csv")) #group scores
 write.csv(sr_1$summary_score, file=file.path(op,"Oct2016_sum_score_truelvm_fit_1.csv")) #the summary scores & stars
 
@@ -45,6 +42,10 @@ table(sr_1$summary_score$star)
 #Updated December 2017 data with corrected LVM and K means
 
 input <- rstarating::cms_star_rating_input_2017dec
+sr_1 <- rating(fit_1$groups$summary_score, method="kmeans", iter.max = 100)
+
+write.csv(fit_1$groups$pars, file=file.path(op,"Oct2016_par_truelvm_fit_1.csv")) #the parameters
+
 x <- mstbl(input)
 fit_2 <- relvm(x)
 sr_2 <- rating(x=fit_2$groups$summary_score,method="rclus2",score_col="sum_score",iter.max=5000)
@@ -73,30 +74,37 @@ colnames(cah)[1] <- 'PROVIDER_ID'
 ach_1 <- inner_join(x_og, ach, by = 'PROVIDER_ID')
 cah_1 <- inner_join(x_og, cah, by = 'PROVIDER_ID')
 
+#Removing measure weights for the LVM model to balance measure loading
+
+ach_2 <- measure_manipulate(dat=ach_1, method="den_one", measures="hai_1")
+cah_2 <- measure_manipulate(dat=cah_1, method="den_one", measures="hai_1")
+
 ------------------------------------------------------------------
 
-#First attempt at applying the pipeline to the two separate input hospital types
+#Final run throw at applying the pipeline to the two separate input hospital types with balance measure loading
 #Will have to remove the hospital type column for mstbl cleaning function to work
+  
+#ach hospitals
 
-copy_ach <- ach_1
-copy_ach$Hospital.Type <- NULL
+ach_2$Hospital.Type <- NULL
 
-x <- mstbl(copy_ach)
+x <- mstbl(ach_2)
 fit_ach <- relvm(x)
 sr_ach <- rating(fit_ach$groups$summary_score, method="kmeans", iter.max = 100)
 
-write.csv(sr_ach$summary_score, file=file.path(op,"ach_test.csv")) #ach summary scores & stars
+write.csv(sr_ach$summary_score, file=file.path(op,"ach_custom_ratings.csv")) #ach summary scores & stars
 
 table(sr_ach$summary_score$star)
 
-copy_cah <- cah_1
-copy_cah$Hospital.Type <- NULL
+#cah hospitals
 
-x <- mstbl(copy_cah)
+cah_2$Hospital.Type <- NULL
+
+x <- mstbl(cah_2)
 fit_cah <- relvm(x)
 sr_cah <- rating(fit_cah$groups$summary_score, method="kmeans", iter.max = 100)
 
-write.csv(sr_cah$summary_score, file=file.path(op,"cah_test.csv")) #cah summary scores & stars
+write.csv(sr_cah$summary_score, file=file.path(op,"cah_custom_ratings.csv")) #cah summary scores & stars
 
 table(sr_cah$summary_score$star)
 
@@ -111,20 +119,24 @@ combo$sum_score_win <- NULL
 combo$report_indicator <- NULL
 colnames(combo)[1] <- 'PROVIDER_ID'
 
+star_ratings <- combo
+
+table(star_ratings$Suggested_Rating)
+
 #Isolate original cms 2016 star ratings for comparison in PBI
 
-cms <- sr$summary_score
+#cms <- sr$summary_score
 
-cms$sum_score <- NULL
-cms$sum_score_win <- NULL
-cms$report_indicator <- NULL
-colnames(cms)[1] <- 'PROVIDER_ID'
+#cms$sum_score <- NULL
+#cms$sum_score_win <- NULL
+#cms$report_indicator <- NULL
+#colnames(cms)[1] <- 'PROVIDER_ID'
 
 #Inner merge on provider_ID
 
-star_ratings <- inner_join(combo, cms, by = 'PROVIDER_ID')
+#star_ratings <- inner_join(combo, cms, by = 'PROVIDER_ID')
 
 colnames(star_ratings)[2] <- 'Suggested_Rating'
-colnames(star_ratings)[3] <- 'CMS_Rating'
+#colnames(star_ratings)[3] <- 'CMS_Rating'
 
-write.csv(star_ratings, file=file.path(op,"star_ratings.csv")) #the summary suggested and cms scores
+write.csv(star_ratings, file=file.path(op,"suggested_star_ratings.csv")) #the summary suggested and cms scores
