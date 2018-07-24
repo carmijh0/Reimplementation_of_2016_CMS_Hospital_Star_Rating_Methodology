@@ -2,18 +2,19 @@
 
 Executive Summary
 
-The American healthcare system has undergone some of the most sweeping, industry-wide regulatory changes over the last eight years with the introduction of the Affordable Care Act in 2010.  One portion of the most influential elements of the law is the MLR (medical loss ratio), which requires insurers to spend 80% of the premiums they collect no matter the outcome of the actual services rendered. Simple logic dictates that to grow the 20%, insurers must spend more of that 80% of a fully-insured market’s premiums. While providers are privy to this, they continue to bill more and more to generate more revenue. This has created a positive feedback loop that usually leaves the employer and their employees financially “in the dust.” 
+The American healthcare system has undergone some of the most sweeping, industry-wide regulatory changes over the last eight years with the introduction of the Affordable Care Act in 2010.  One of the most influential elements of the new law is the big-picture transparency models introduced such as the publicly available hospital star rating system and other hospital compare methodologies. These hospital star ratings are important because they influence hospital acquisitions and patient decision making. Since their inception, the CMS’s methodology has undergone a large amount of scrutiny from hospital owners and operators, which the CMS refers to as “stakeholders.”
 
 Motivation
 
-My motivation to pursue this topic primarily stims from direct experiences dealing with the frustrations seen at my previous position at a health insurance brokerage along with my interest in cost-containment price transparency solutions to mitigate these problems for employers that I will be investigating in my new position.  Because of the dramatic rate increases being seen in the small business, fully-insured market across the country, reference-based pricing models and self-funding (self-insured) methods are become more financially advantageous for larger swaths of the employer market, demanding more price transparency and accountability beyond the veil of secrecy draped over the health insurance industry.  
+My motivation to pursue this topic primarily stims from the recent amount of journalism that has been published on frustrations many stakeholders have been having with the CMS’s methodology to generate these overall hospital star ratings.  While a large part of the CMS’s goal with these price ratings is representative of a step in the right direction to highlight the need for price transparency and accountability beyond the veil of secrecy draped over the industry, they have a long road ahead to finetune the correct statistical approach to implement the star rating system successfully. 
 
 Data Question
 
-At its root, my motivation to explore this topic comes from the desire to explore the misaligned incentives of the modern, American healthcare system.  More specifically, the cost discrepancy for procedures and the resulting outcomes. I would like to do most of my analysis, exploration, and preparation in Python to then be able to use this code to create an online data application to highlight the price and outcome discrepancies for procedures within the same market. 
+At its root, my motivation to explore this topic comes from the desire to explore measures to provide quality and cost transparency within the American healthcare system. 
 
-1.	Based on the CMS cost and outcomes datasets, what providers provide the best “bang for your buck” within a given zip code and major DRG group?
-2.	Can I create a Power BI application to highlight these comparisons to help a potential patient make a more informed decision on choosing a provider for a procedure?
+1. Can I address the stakeholders’ largest complaints about the 2016 star rating methodology and implement a revised star level rating? 
+2. Based on the CMS cost data and these updated quality star ratings, which providers provide the best “bang for your buck” within a given market and major DRG group?
+3. Can I create a Power BI application to highlight these comparisons to help a potential patient make a more informed decision on choosing a provider for a procedure?
 
 Data Sources
 1.	CMS Inpatient Provider Utilization and Payment Data - https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Medicare-Provider-Charge-Data/Inpatient.html
